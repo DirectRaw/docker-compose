@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+        oxidized:
+          container_name: oxidized
+          image: oxidized/oxidized:latest
+          ports:
+            - "8888:8888"
+          volumes:
+            - /home/rawil/laba/docker/vol:/root/.config/oxidized
+          depends_on:
+            - nginx
+          restart: unless-stopped
+
+        nginx:
+                container_name: nginx
+                image: nginx
+                ports:
+                        - "80:80"
+                volumes:
+                        - /home/rawil/laba/docker/vol/nginx/default.conf:/etc/nginx/conf.d/default.conf
+                        - /home/rawil/laba/docker/vol/nginx/.htpasswd:/etc/nginx/.htpasswd
+                restart: unless-stopped
+
+        tftp:
+                container_name: tftp
+                image: pghalliday/tftp
+                ports:
+                        - "69:69/udp"
+                volumes:
+                        - /home/rawil/laba/docker/vol/fortigate:/var/tftpboot
+                restart: unless-stopped
